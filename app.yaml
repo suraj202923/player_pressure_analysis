@@ -2,7 +2,5 @@ runtime: nodejs20
 instance_class: F2
 
 env_variables:
-  GEMINI_API_KEY: "AIzaSyBPE5wcWtudZIdG0eL1SVJ8SNQSW2e2S_4"
-
-env_variables:
   NODE_ENV: production
+  GEMINI_API_KEY: "AIzaSyBPE5wcWtudZIdG0eL1SVJ8SNQSW2e2S_4"
