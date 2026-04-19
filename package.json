@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsx server.ts",
     "build": "vite build",
-    "preview": "vite preview",
+    "start": "node server.js",
+    "postinstall": "vite build && cp server.ts dist/server.js",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit"
   },
@@ -25,7 +26,8 @@
     "socket.io-client": "^4.8.3",
     "vite": "^6.2.0"
   },
-  "devDependencies": {
+  "dependencies": {
+    "serve": "^14.2.0",
     "@types/express": "^4.17.21",
     "@types/node": "^22.14.0",
     "autoprefixer": "^10.4.21",
