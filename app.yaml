@@ -3,11 +3,17 @@ instance_class: F1
 
 env_variables:
   NODE_ENV: production
-  VITE_GEMINI_API_KEY: ""
-  GE_KEY: ""
+  GE_KEY: "your_actual_key"   # backend only
 
 handlers:
-  - url: /assets
-    static_dir: dist/assets
-  - url: /.*
-    script: auto
+  - url: /assets/(.*)
+    static_files: dist/assets/\1
+    upload: dist/assets/(.*)
+    http_headers:
+      Cache-Control: "no-cache"
+
+  - url: /(.*)
+    static_files: dist/index.html
+    upload: dist/index.html
+    http_headers:
+      Cache-Control: "no-cache"
