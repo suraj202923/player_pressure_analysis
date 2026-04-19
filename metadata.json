@@ -1,0 +1,6 @@
+{
+  "name": "Cricket Pulse: Live Pressure Dashboard",
+  "description": "A real-time analytics engine calculating the mental pressure score of cricket matches based on stadium noise, run rates, and match context.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function isValidChatMessage(data) {
+      return data.keys().hasAll(['user', 'text', 'timestamp']) 
+          && data.keys().size() <= 5
+          && data.user is string && data.user.size() > 0 && data.user.size() <= 50
+          && data.text is string && data.text.size() > 0 && data.text.size() <= 500
+          && (data.timestamp == request.time || data.timestamp is timestamp);
+    }
+
+    // Messages collection
+    match /messages/{messageId} {
+      // Allow everyone to read the chat to see the live pulse
+      allow list: if true;
+      allow get: if true;
+      
+      // Only signed-in users can post
+      allow create: if isSignedIn() 
+                  && isValidChatMessage(incoming()) 
+                  && isValidId(messageId);
+      
+      // Messages are typically immutable in this chat app
+      allow update, delete: if false;
+    }
+    
+    // Connection test document
+    match /test/connection {
+       allow read: if true;
+    }
+  }
+}
