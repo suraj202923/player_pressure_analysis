@@ -119,14 +119,12 @@ async function startServer() {
     });
   });
 
-  // Serve static files if needed in production
-  if (process.env.NODE_ENV === "production") {
-    const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
-    });
-  }
+  // Serve static files and index.html for all environments
+  const distPath = path.join(process.cwd(), "dist");
+  app.use(express.static(distPath));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(distPath, "index.html"));
+  });
 
   httpServer.listen(PORT, "0.0.0.0", () => {
     console.log(`Backend server running on port ${PORT}`);

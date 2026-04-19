@@ -174,9 +174,43 @@ export default function App() {
     try {
       // Safely access GEMINI_API_KEY
       const apiKey = customKey || (typeof process !== 'undefined' ? process.env.GEMINI_API_KEY : (import.meta as any).env.VITE_GEMINI_API_KEY);
-      
       if (!apiKey) {
-         throw new Error("GE_KEY_MISSING");
+        setError("Gemini API Key is missing. The app is running in simulation mode with default data.");
+        // Always provide a default/mock data fallback if Gemini API is not available
+        const defaultData = {
+          match_info: {
+            match: "RCB vs DC",
+            batting_team: "DC",
+            bowling_team: "RCB",
+            stadium: "M. Chinnaswamy Stadium, Bengaluru",
+            stadium_capacity: 32000,
+            is_home_game: false,
+            target: 176,
+            current_score: 76,
+            wickets_lost: 3,
+            overs_completed: 9.0,
+            current_batter: "KL Rahul",
+            current_bowler: "Mohammed Siraj",
+            weather: { temp: 32, humidity: 27, condition: "Clear Evening" },
+            batting_squad: [],
+            bowling_squad: []
+          },
+          analytics: {
+            pressure_score: 66.36,
+            rrr: 9.09,
+            status: "HIGH PRESSURE",
+            meter_color: "#F97316",
+            reactions: {
+              batter: "KL Rahul is maintaining composure but the increased RRR is forcing some discomfort.",
+              bowler: "Mohammed Siraj is mixing up the pace well, sensing the batter's urgency."
+            }
+          },
+          youtube_search: "https://www.youtube.com/results?search_query=KL%20Rahul%20handling%20pressure%20cricket"
+        };
+        setData(defaultData);
+        setGroundingStatus('idle');
+        setLoading(false);
+        return;
       }
       
       const ai = new GoogleGenAI({ apiKey });
@@ -249,27 +283,51 @@ export default function App() {
       }
     } catch (error: any) {
       console.error("Discovery error, falling back to simulation:", error);
-      
       const is429 = error?.message?.includes('429') || error?.status === 'RESOURCE_EXHAUSTED';
       if (is429) {
         setIsRateLimited(true);
         setGroundingStatus('limited');
       }
-
+      // Always provide a default/mock data fallback if Gemini API fails
+      const defaultData = {
+        match_info: {
+          match: "RCB vs DC",
+          batting_team: "DC",
+          bowling_team: "RCB",
+          stadium: "M. Chinnaswamy Stadium, Bengaluru",
+          stadium_capacity: 32000,
+          is_home_game: false,
+          target: 176,
+          current_score: 76,
+          wickets_lost: 3,
+          overs_completed: 9.0,
+          current_batter: "KL Rahul",
+          current_bowler: "Mohammed Siraj",
+          weather: { temp: 32, humidity: 27, condition: "Clear Evening" },
+          batting_squad: [],
+          bowling_squad: []
+        },
+        analytics: {
+          pressure_score: 66.36,
+          rrr: 9.09,
+          status: "HIGH PRESSURE",
+          meter_color: "#F97316",
+          reactions: {
+            batter: "KL Rahul is maintaining composure but the increased RRR is forcing some discomfort.",
+            bowler: "Mohammed Siraj is mixing up the pace well, sensing the batter's urgency."
+          }
+        },
+        youtube_search: "https://www.youtube.com/results?search_query=KL%20Rahul%20handling%20pressure%20cricket"
+      };
+      setData(defaultData);
+      setGroundingStatus('idle');
+      setLoading(false);
       if (error?.message === "GE_KEY_MISSING") {
-        setError("Gemini API Key is missing. Please configure it in the settings menu.");
+        setError("Gemini API Key is missing. The app is running in simulation mode with default data.");
+      } else {
+        setError("Gemini API is not available. The app is running in simulation mode with default data.");
       }
-
-      // Fallback to legacy mock for stability if discovery fails
-      try {
-        const response = await fetch('/api/live-match');
-        const result = await response.json();
-        setData(result);
-        if (!is429) setGroundingStatus('idle');
-      } catch (fallbackError) {
-        console.error("Critical failure: Fallback also failed.", fallbackError);
-        setError("System failed to initialize. Please check server logs.");
-      }
+      return;
     } finally {
       setLoading(false);
     }
