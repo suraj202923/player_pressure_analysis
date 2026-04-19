@@ -10,7 +10,7 @@ async function startServer() {
   const io = new Server(httpServer, {
     cors: { origin: "*", methods: ["GET", "POST"] }
   });
-  const PORT = process.env.PORT || 8080;
+  const PORT = Number(process.env.PORT) || 8080;
 
   // Analysis Logic
   function calculatePressure(data: any) {
