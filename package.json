@@ -7,7 +7,6 @@
     "dev": "tsx server.ts",
     "build": "vite build && tsc",
     "start": "node dist/server.js",
-    "postinstall": "npm run build",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit"
   },
