@@ -10,7 +10,7 @@ async function startServer() {
   const io = new Server(httpServer, {
     cors: { origin: "*", methods: ["GET", "POST"] }
   });
-  const PORT = 3001;
+  const PORT = process.env.PORT || 8080;
 
   // Analysis Logic
   function calculatePressure(data: any) {
@@ -129,7 +129,7 @@ async function startServer() {
   }
 
   httpServer.listen(PORT, "0.0.0.0", () => {
-    console.log(`Backend server running on http://localhost:${PORT}`);
+    console.log(`Backend server running on port ${PORT}`);
   });
 }
 
