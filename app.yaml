@@ -3,7 +3,8 @@ instance_class: F1
 
 env_variables:
   NODE_ENV: production
-  VITE_GEMINI_API_KEY: "your_actual_api_key_here"
+  VITE_GEMINI_API_KEY: "AIzaSyBPE5wcWtudZIdG0eL1SVJ8SNQSW2e2S_4"
+  GE_KEY: "AIzaSyBPE5wcWtudZIdG0eL1SVJ8SNQSW2e2S_4"
 
 handlers:
   - url: /assets
