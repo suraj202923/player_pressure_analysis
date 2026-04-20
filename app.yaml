@@ -6,14 +6,12 @@ env_variables:
   GE_KEY: "your_actual_key"   # backend only
 
 handlers:
-  - url: /assets/(.*)
-    static_files: dist/assets/\1
-    upload: dist/assets/(.*)
+  - url: /assets
+    static_dir: dist/assets
     http_headers:
       Cache-Control: "no-cache"
 
-  - url: /(.*)
-    static_files: dist/index.html
-    upload: dist/index.html
+  - url: /.*
+    script: auto
     http_headers:
       Cache-Control: "no-cache"
