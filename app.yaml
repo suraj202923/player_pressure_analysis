@@ -13,5 +13,3 @@ handlers:
 
   - url: /.*
     script: auto
-    http_headers:
-      Cache-Control: "no-cache"
